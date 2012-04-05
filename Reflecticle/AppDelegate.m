@@ -32,9 +32,13 @@
 - (void)askForProjects {
     NSString *apiKeyString = [[NSUserDefaults standardUserDefaults] stringForKey:@"apiKey"];
 
+
     if(apiKeyString) {
+        NSLog(@"have api key %@", apiKeyString);
         NSDictionary *params = [NSDictionary dictionaryWithKeysAndObjects:@"api_key", apiKeyString, nil];
-        [[RKClient sharedClient] get:@"/api/projects.json" queryParams:params delegate:self];
+        [[RKClient sharedClient] get:@"/api/projects.json" queryParameters:params delegate:self];
+    } else {
+        NSLog(@"wtf no api key!");
     }
 }
 
@@ -59,7 +63,7 @@
                                                                        @"project_id", [self.project stringValue],
                                                                        @"description", [self.post stringValue],
                                                                        nil];
-    [[RKClient sharedClient] get:@"/api/activities/create.json" queryParams:params delegate:self];
+    [[RKClient sharedClient] get:@"/api/activities/create.json" queryParameters:params delegate:self];
     [self.post setStringValue:@""];
     [[(NSButton*)sender window] performClose:nil];
 }
